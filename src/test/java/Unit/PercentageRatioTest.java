@@ -8,12 +8,6 @@ import static org.junit.Assert.*;
 
 public class PercentageRatioTest {
     @Test
-    public void shouldFailWhenCreateObjectWithWrongValue() throws InvalidValueOfPercentageRatio {
-        //given
-        new PercentageRatio(BigDecimal.valueOf(1));
-    }
-
-    @Test
     public void add() throws InvalidValueOfPercentageRatio {
         //given
         PercentageRatio ratio = new PercentageRatio(BigDecimal.valueOf(10.444));
@@ -87,5 +81,17 @@ public class PercentageRatioTest {
 
         //then
         assertEquals("12.34%", renderedValue);
+    }
+
+    @Test
+    public void getRatioSum() throws InvalidValueOfPercentageRatio {
+        //given
+        PercentageRatio ratio = new PercentageRatio(BigDecimal.ONE);
+
+        //when
+        BigDecimal ratioSum = ratio.getRatioSum();
+
+        //then
+        assertEquals(BigDecimal.valueOf(100), ratioSum);
     }
 }

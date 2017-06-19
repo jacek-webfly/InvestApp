@@ -13,7 +13,16 @@ public class PercentageRatioCreatingTest {
     public final ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void testFailWhenCreateObjectWithToLowValue() throws InvalidValueOfPercentageRatio {
+    public void shouldFailWhenValueIsNull() throws InvalidValueOfPercentageRatio {
+        //expect
+        thrown.expect(NullPointerException.class);
+
+        //when
+        new PercentageRatio(null);
+    }
+
+    @Test
+    public void shouldFailWhenCreateObjectWithToLowValue() throws InvalidValueOfPercentageRatio {
         //expect
         thrown.expect(InvalidValueOfPercentageRatio.class);
 
@@ -22,7 +31,7 @@ public class PercentageRatioCreatingTest {
     }
 
     @Test
-    public void testFailWhenCreateObjectWithToHighValue() throws InvalidValueOfPercentageRatio {
+    public void shouldFailWhenCreateObjectWithToHighValue() throws InvalidValueOfPercentageRatio {
         //expect
         thrown.expect(InvalidValueOfPercentageRatio.class);
 
@@ -31,7 +40,7 @@ public class PercentageRatioCreatingTest {
     }
 
     @Test
-    public void testSuccessWhenCreateObjectWithCorrectLowValue() throws InvalidValueOfPercentageRatio {
+    public void shouldSuccessWhenCreateObjectWithCorrectLowValue() throws InvalidValueOfPercentageRatio {
         //given
         int value = 0;
 
@@ -44,7 +53,7 @@ public class PercentageRatioCreatingTest {
     }
 
     @Test
-    public void testSuccessWhenCreateObjectWithCorrectHighValue() throws InvalidValueOfPercentageRatio {
+    public void shouldSuccessWhenCreateObjectWithCorrectHighValue() throws InvalidValueOfPercentageRatio {
         //given
         int value = 100;
 
@@ -57,7 +66,7 @@ public class PercentageRatioCreatingTest {
     }
 
     @Test
-    public void testSuccessWhenCreateByStaticMethod() throws InvalidValueOfPercentageRatio {
+    public void shouldSuccessWhenCreateByStaticMethod() throws InvalidValueOfPercentageRatio {
         //given
         double value = 99.99;
 
