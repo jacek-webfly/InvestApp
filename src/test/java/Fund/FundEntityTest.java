@@ -1,10 +1,34 @@
 package Fund;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class FundEntityTest {
+    @Rule
+    public final ExpectedException thrown = ExpectedException.none();
+
+    @Test
+    public void shouldFailWhenNameIsNull() {
+        //expect
+        thrown.expect(NullPointerException.class);
+
+        //when
+        new FundEntity(1, null, FundType.FOREIGN);
+    }
+
+    @Test
+    public void shouldFailWhenFundTypeIsNull() {
+        //expect
+        thrown.expect(NullPointerException.class);
+
+        //when
+        new FundEntity(1, "name", null);
+    }
+
     @Test
     public void shouldCorrectlyCreateFundObject() {
         //given

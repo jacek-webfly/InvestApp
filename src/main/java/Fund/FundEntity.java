@@ -17,7 +17,7 @@ public class FundEntity {
         return id;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
