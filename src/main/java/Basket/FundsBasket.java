@@ -13,6 +13,9 @@ import java.util.Map;
 import java.util.Objects;
 
 public class FundsBasket {
+    static final String EXCEPTION_MSG_BASKET_IS_EMPTY = "There is not any fund in basket";
+    static final String EXCEPTION_MSG_INVESTMENT_AMOUNT_IS_NULL = "investmentAmount must not be null";
+    static final String EXCEPTION_MSG_INVESTMENT_STYLE_IS_NULL = "investmentStyle must not be null";
     private final List<FundEntity> fundEntities = new ArrayList<>();
     private Fund.InvestmentStyle investmentStyle;
     private Money investmentAmount;
@@ -57,10 +60,13 @@ public class FundsBasket {
 
     private void validateBasketStateBeforeCalculation() throws InvalidBasketState {
         if (investmentStyle == null) {
-            throw new InvalidBasketState("investmentStyle must not be null");
+            throw new InvalidBasketState(EXCEPTION_MSG_INVESTMENT_STYLE_IS_NULL);
         }
         if (investmentAmount == null) {
-            throw new InvalidBasketState("investmentAmount must not be null");
+            throw new InvalidBasketState(EXCEPTION_MSG_INVESTMENT_AMOUNT_IS_NULL);
+        }
+        if (fundEntities.isEmpty()) {
+            throw new InvalidBasketState(EXCEPTION_MSG_BASKET_IS_EMPTY);
         }
     }
 }

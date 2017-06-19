@@ -16,10 +16,6 @@ public class CalculationAlgorithm implements IAlgorithm {
     public Map<Integer, CalculatedFund> calculate(List<FundEntity> fundEntities, Money investmentAmount, InvestmentStyle investmentStyle)
             throws InvalidFundsCollectionForInvestmentStyle, InvalidValueOfPercentageRatio, InvalidBasketState {
 
-        if (fundEntities.isEmpty()) {
-            throw new InvalidBasketState("There is not any fund in basket");
-        }
-
         Map<FundType, Integer> quantityFundTypesInBasket = getQuantityFundTypes(fundEntities);
 
         validateInvestmentStyleForFundTypes(investmentStyle, quantityFundTypesInBasket);
