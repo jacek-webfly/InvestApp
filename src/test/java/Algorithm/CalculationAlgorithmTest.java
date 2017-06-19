@@ -12,26 +12,74 @@ import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class CalculationAlgorithmTest {
     @Rule
     public final ExpectedException thrown = ExpectedException.none();
 
     @Test
+    public void shouldFailWhenFundEntitiesIsNull()
+            throws InvalidValueOfPercentageRatio, InvalidFundsCollectionForInvestmentStyle, InvalidBasketState {
+        //given
+        CalculationAlgorithm calculationAlgorithm = new CalculationAlgorithm();
+
+        //expect
+        thrown.expect(NullPointerException.class);
+
+        //when
+        calculationAlgorithm.calculate(null, mock(Money.class), mock(InvestmentStyle.class));
+    }
+
+    @Test
+    public void shouldFailWhenInvestmentAmountIsNull()
+            throws InvalidValueOfPercentageRatio, InvalidFundsCollectionForInvestmentStyle, InvalidBasketState {
+        //given
+        CalculationAlgorithm calculationAlgorithm = new CalculationAlgorithm();
+
+        //expect
+        thrown.expect(NullPointerException.class);
+
+        //when
+        calculationAlgorithm.calculate(new ArrayList<>(), null, mock(InvestmentStyle.class));
+    }
+
+    @Test
+    public void shouldFailWhenInvestmentStylesNull()
+            throws InvalidValueOfPercentageRatio, InvalidFundsCollectionForInvestmentStyle, InvalidBasketState {
+        //given
+        CalculationAlgorithm calculationAlgorithm = new CalculationAlgorithm();
+
+        //expect
+        thrown.expect(NullPointerException.class);
+
+        //when
+        calculationAlgorithm.calculate(new ArrayList<>(), mock(Money.class), null);
+    }
+
+    @Test
     public void shouldFailWhenInvestmentStyleNotFitToSelectedFunds()
             throws InvalidValueOfPercentageRatio, InvalidFundsCollectionForInvestmentStyle, InvalidBasketState {
         //given
         CalculationAlgorithm calculationAlgorithm = new CalculationAlgorithm();
-        FundEntity fundEntity = mock(FundEntity.class);
+
         java.util.List<FundEntity> fundEntities = new ArrayList<>();
-        fundEntities.add(fundEntity);
+        fundEntities.add(getMockFundEntityByType(FundType.POLISH));
+        fundEntities.add(getMockFundEntityByType(FundType.FOREIGN));
+
+
+        Map<FundType, Ratio> fundsForInvestmentStyle = new HashMap<>();
+        fundsForInvestmentStyle.put(FundType.POLISH, mock(Ratio.class));
+        InvestmentStyle investmentStyle = mock(InvestmentStyle.class);
+        when(investmentStyle.getFunds()).thenReturn(fundsForInvestmentStyle);
 
         //expect
         thrown.expect(InvalidFundsCollectionForInvestmentStyle.class);
 
         //when
-        calculationAlgorithm.calculate(fundEntities, mock(Money.class), mock(InvestmentStyle.class));
+        calculationAlgorithm.calculate(fundEntities, mock(Money.class), investmentStyle);
     }
+
     @Test
     public void shouldSuccessCalculate()
             throws InvalidValueOfPercentageRatio, InvalidFundsCollectionForInvestmentStyle, InvalidBasketState,
@@ -68,7 +116,6 @@ public class CalculationAlgorithmTest {
         assertEquals("5", calculatedFunds.get(3).renderValue());
         assertEquals("5.00%", calculatedFunds.get(3).renderRatio());
     }
-
 
     @Test
     public void shouldSuccessCalculateWhenRestOfRatioIsHappen()
@@ -111,5 +158,11 @@ public class CalculationAlgorithmTest {
         assertEquals("Fundusz pieniężny 2", calculatedFunds.get(4).getName());
         assertEquals("0.02", calculatedFunds.get(4).renderValue());
         assertEquals("0.02%", calculatedFunds.get(4).renderRatio());
+    }
+
+    private FundEntity getMockFundEntityByType(FundType fundType) {
+        FundEntity fundEntity = mock(FundEntity.class);
+        when(fundEntity.getFundType()).thenReturn(fundType);
+        return fundEntity;
     }
 }

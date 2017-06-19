@@ -16,6 +16,9 @@ public class InvestmentStyle {
     public InvestmentStyle(String name, Map<FundType, Ratio> funds) throws InvalidSumOfRatio, InvalidValueOfPercentageRatio {
         this.name = Objects.requireNonNull(name, "name must not be null");
         this.funds = Objects.requireNonNull(funds, "funds must not be null");
+        if (funds.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
         validateRatioSum(funds);
     }
 

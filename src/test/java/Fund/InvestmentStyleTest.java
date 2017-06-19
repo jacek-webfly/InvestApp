@@ -1,8 +1,5 @@
 package Fund;
 
-import Fund.FundType;
-import Fund.InvalidSumOfRatio;
-import Fund.InvestmentStyle;
 import Unit.InvalidValueOfPercentageRatio;
 import Unit.Ratio;
 import org.junit.Rule;
@@ -22,7 +19,59 @@ public class InvestmentStyleTest {
     public final ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void shouldSuccessCreateObject() throws InvalidValueOfPercentageRatio, InvalidSumOfRatio {
+    public void shouldFailWhenNameIsNull() throws InvalidValueOfPercentageRatio, InvalidSumOfRatio {
+        //given
+        HashMap<FundType, Ratio> funds = new HashMap<>();
+        funds.put(FundType.POLISH, mock(Ratio.class));
+
+        //expect
+        thrown.expect(NullPointerException.class);
+
+        //when
+        new InvestmentStyle(null, funds);
+    }
+
+    @Test
+    public void shouldFailWhenFundsIsNull() throws InvalidValueOfPercentageRatio, InvalidSumOfRatio {
+        //expect
+        thrown.expect(NullPointerException.class);
+
+        //when
+        new InvestmentStyle("name", null);
+    }
+
+    @Test
+    public void shouldFailWhenFundsIsEmpty() throws InvalidValueOfPercentageRatio, InvalidSumOfRatio {
+        //given
+        HashMap<FundType, Ratio> funds = new HashMap<>();
+
+        //expect
+        thrown.expect(IllegalArgumentException.class);
+
+        //when
+        new InvestmentStyle("safe", funds);
+    }
+
+    @Test
+    public void shouldFailWhenSumOfRatioIsInvalid() throws InvalidValueOfPercentageRatio, InvalidSumOfRatio {
+        //given
+        Ratio ratio = mock(Ratio.class);
+        when(ratio.add(any())).thenReturn(ratio);
+        when(ratio.getRatioSum()).thenReturn(BigDecimal.valueOf(100));
+        when(ratio.getValue()).thenReturn(BigDecimal.valueOf(99));
+
+        HashMap<FundType, Ratio> funds = new HashMap<>();
+        funds.put(FundType.POLISH, ratio);
+
+        //expect
+        thrown.expect(InvalidSumOfRatio.class);
+
+        //when
+        new InvestmentStyle("safe", funds);
+    }
+
+    @Test
+    public void shouldSuccessWhenSumOfRatioIsValid() throws InvalidValueOfPercentageRatio, InvalidSumOfRatio {
         //given
         Ratio ratio = mock(Ratio.class);
         BigDecimal sumRatio = BigDecimal.valueOf(100);
@@ -38,23 +87,5 @@ public class InvestmentStyleTest {
 
         //then
         assertEquals(funds, investmentStyle.getFunds());
-    }
-
-    @Test
-    public void shouldFailWhenCreateObjectWithWrongFundTypesRatio() throws InvalidValueOfPercentageRatio, InvalidSumOfRatio {
-        //given
-        Ratio ratio = mock(Ratio.class);
-        when(ratio.add(any())).thenReturn(ratio);
-        when(ratio.getRatioSum()).thenReturn(BigDecimal.valueOf(100));
-        when(ratio.getValue()).thenReturn(BigDecimal.valueOf(99));
-
-        HashMap<FundType, Ratio> funds = new HashMap<>();
-        funds.put(FundType.POLISH, ratio);
-
-        //expect
-        thrown.expect(InvalidSumOfRatio.class);
-
-        //when
-        new InvestmentStyle("safe", funds);
     }
 }

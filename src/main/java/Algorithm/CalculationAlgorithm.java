@@ -10,14 +10,17 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class CalculationAlgorithm implements IAlgorithm {
 
     public Map<Integer, CalculatedFund> calculate(List<FundEntity> fundEntities, Money investmentAmount, InvestmentStyle investmentStyle)
             throws InvalidFundsCollectionForInvestmentStyle, InvalidValueOfPercentageRatio, InvalidBasketState {
+        Objects.requireNonNull(fundEntities, "fundEntities must not be null");
+        Objects.requireNonNull(investmentAmount, "investmentAmount must not be null");
+        Objects.requireNonNull(investmentStyle, "investmentStyle must not be null");
 
         Map<FundType, Integer> quantityFundTypesInBasket = getQuantityFundTypes(fundEntities);
-
         validateInvestmentStyleForFundTypes(investmentStyle, quantityFundTypesInBasket);
 
         Map<FundType, Ratio> ratios = new HashMap<>();
