@@ -50,16 +50,21 @@ public class CalculatedFundEntityTest {
         FundEntity fundEntity = mock(FundEntity.class);
         when(fundEntity.getName()).thenReturn(fundName);
 
+        String ratioValue = "100%";
+        Ratio ratio = mock(Ratio.class);
+        when(ratio.renderValue()).thenReturn(ratioValue);
+
         BigDecimal moneyValue = BigDecimal.valueOf(100);
         Money money = mock(Money.class);
         when(money.getValue()).thenReturn(moneyValue);
 
         //when
-        CalculatedFund calculatedFund = new CalculatedFund(fundEntity, money, mock(Ratio.class));
+        CalculatedFund calculatedFund = new CalculatedFund(fundEntity, money, ratio);
 
         //then
         assertEquals(fundName, calculatedFund.getName());
         assertEquals(money, calculatedFund.getValue());
-        assertEquals(moneyValue.toString(), calculatedFund.renderValue());
+        assertEquals(ratioValue, calculatedFund.renderRatio());
+        assertEquals("100", calculatedFund.renderValue());
     }
 }
