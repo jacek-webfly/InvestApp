@@ -43,6 +43,7 @@ public class FundsBasketTest {
 
         //expect
         thrown.expect(NullPointerException.class);
+        thrown.expectMessage(FundsBasket.EXCEPTION_MSG_INVESTMENT_AMOUNT_IS_NULL);
 
         //when
         fundsBasket.setInvestmentAmount(null);
@@ -55,6 +56,7 @@ public class FundsBasketTest {
 
         //expect
         thrown.expect(NullPointerException.class);
+        thrown.expectMessage(FundsBasket.EXCEPTION_MSG_INVESTMENT_STYLE_IS_NULL);
 
         //when
         fundsBasket.setInvestmentStyle(null);

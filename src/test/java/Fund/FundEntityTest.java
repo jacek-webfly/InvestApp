@@ -1,7 +1,5 @@
 package Fund;
 
-import Fund.FundEntity;
-import Fund.FundType;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

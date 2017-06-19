@@ -28,11 +28,11 @@ public class FundsBasket {
     }
 
     public void setInvestmentStyle(Fund.InvestmentStyle investmentStyle) {
-        this.investmentStyle = Objects.requireNonNull(investmentStyle, "investmentStyle must not be null");
+        this.investmentStyle = Objects.requireNonNull(investmentStyle, EXCEPTION_MSG_INVESTMENT_STYLE_IS_NULL);
     }
 
     public void setInvestmentAmount(Money investmentAmount) {
-        Objects.requireNonNull(investmentAmount, "investmentAmount must not be null");
+        Objects.requireNonNull(investmentAmount, EXCEPTION_MSG_INVESTMENT_AMOUNT_IS_NULL);
         scale = investmentAmount.getValue().scale();
         this.investmentAmount = new Money(investmentAmount.getValue(), scale);
     }
