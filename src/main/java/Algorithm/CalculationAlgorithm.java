@@ -35,25 +35,7 @@ public class CalculationAlgorithm implements IAlgorithm {
             restsOfRatioDivision.put(entry, restOfDivision.getValue().compareTo(BigDecimal.ZERO) != 0 ? restOfDivision : null);
         }
 
-        return getIntegerCalculatedFundMap(fundEntities, investmentAmount, ratios, restsOfRatioDivision);
-    }
-
-    private Map<Integer, CalculatedFund> getIntegerCalculatedFundMap(
-            List<FundEntity> fundEntities, Money investmentAmount,
-            Map<FundType, Ratio> ratios, Map<FundType, Ratio> restsOfRatioDivision) throws InvalidValueOfPercentageRatio {
-
-        Map<Integer, CalculatedFund> calculatedFundsCollection = new HashMap<>();
-        for (FundEntity fundEntity : fundEntities) {
-            Ratio ratio = ratios.get(fundEntity.getFundType());
-            if (restsOfRatioDivision.get(fundEntity.getFundType()) != null) {
-                ratio = ratio.add(restsOfRatioDivision.get(fundEntity.getFundType()));
-                restsOfRatioDivision.put(fundEntity.getFundType(), null);
-            }
-
-            Money value = investmentAmount.multiply(ratio);
-            calculatedFundsCollection.put(fundEntity.getId(), new CalculatedFund(fundEntity, value, ratio));
-        }
-        return calculatedFundsCollection;
+        return getCalculatedFunds(fundEntities, investmentAmount, ratios, restsOfRatioDivision);
     }
 
     private Map<FundType, Integer> getQuantityFundTypes(List<FundEntity> fundEntities) {
@@ -72,5 +54,23 @@ public class CalculationAlgorithm implements IAlgorithm {
         if (!investmentStyle.getFunds().keySet().equals(quantityFundTypesInBasket.keySet())) {
             throw new InvalidFundsCollectionForInvestmentStyle();
         }
+    }
+
+    private Map<Integer, CalculatedFund> getCalculatedFunds(
+            List<FundEntity> fundEntities, Money investmentAmount,
+            Map<FundType, Ratio> ratios, Map<FundType, Ratio> restsOfRatioDivision) throws InvalidValueOfPercentageRatio {
+
+        Map<Integer, CalculatedFund> calculatedFundsCollection = new HashMap<>();
+        for (FundEntity fundEntity : fundEntities) {
+            Ratio ratio = ratios.get(fundEntity.getFundType());
+            if (restsOfRatioDivision.get(fundEntity.getFundType()) != null) {
+                ratio = ratio.add(restsOfRatioDivision.get(fundEntity.getFundType()));
+                restsOfRatioDivision.put(fundEntity.getFundType(), null);
+            }
+
+            Money value = investmentAmount.multiply(ratio);
+            calculatedFundsCollection.put(fundEntity.getId(), new CalculatedFund(fundEntity, value, ratio));
+        }
+        return calculatedFundsCollection;
     }
 }
